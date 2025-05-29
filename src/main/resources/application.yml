@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/bookstore
-    username: postgres
-    password: postgres
+    username: bookstore_user
+    password: supersecret
   jpa:
     hibernate:
       ddl-auto: validate
@@ -10,6 +10,14 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
+    dbms: postgresql
+
 
 server:
   port: 8080
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
