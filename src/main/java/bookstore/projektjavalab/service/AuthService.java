@@ -36,8 +36,7 @@ public class AuthService {
         if (userRepo.existsByEmail(req.getEmail())) {
             throw new RuntimeException("Email zajęty");
         }
-        Role userRole = roleRepo.findByName("USER")
-                .orElseThrow(() -> new RuntimeException("Brak roli USER"));
+        Role userRole = roleRepo.findByName("USER").orElseThrow(() -> new RuntimeException("Brak roli USER"));
         User user = new User();
         user.setUsername(req.getUsername());
         user.setEmail(req.getEmail());
