@@ -3,6 +3,7 @@ package bookstore.projektjavalab.service.impl;
 import bookstore.projektjavalab.model.Book;
 import bookstore.projektjavalab.repository.BookRepository;
 import bookstore.projektjavalab.service.BookService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +24,8 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book findById(Long id) {
-        return repository.findById(id).orElseThrow(() -> new RuntimeException("Book not found"));
+        return repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Book not found: " + id));
     }
 
     @Override
@@ -35,11 +37,11 @@ public class BookServiceImpl implements BookService {
     public Book update(Long id, Book book) {
         Book existing = findById(id);
         existing.setTitle(book.getTitle());
-        existing.setAuthor(book.getAuthor());
-        existing.setCategories(book.getCategories());
         existing.setIsbn(book.getIsbn());
         existing.setDescription(book.getDescription());
         existing.setPrice(book.getPrice());
+        existing.setAuthors(book.getAuthors());
+        existing.setCategories(book.getCategories());
         return repository.save(existing);
     }
 

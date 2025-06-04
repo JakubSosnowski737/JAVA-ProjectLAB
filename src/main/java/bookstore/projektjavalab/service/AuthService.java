@@ -6,6 +6,7 @@ import bookstore.projektjavalab.model.Role;
 import bookstore.projektjavalab.model.User;
 import bookstore.projektjavalab.repository.RoleRepository;
 import bookstore.projektjavalab.repository.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,13 +31,12 @@ public class AuthService {
     }
 
     public void register(RegisterRequest req) {
-        if (userRepo.existsByUsername(req.getUsername())) {
-            throw new RuntimeException("Nazwa użytkownika zajęta");
+        if (userRepo.findByUsername(req.getUsername()).isPresent()) {
+            throw new IllegalArgumentException("Użytkownik już istnieje");
         }
-        if (userRepo.existsByEmail(req.getEmail())) {
-            throw new RuntimeException("Email zajęty");
-        }
-        Role userRole = roleRepo.findByName("USER").orElseThrow(() -> new RuntimeException("Brak roli USER"));
+        Role userRole = roleRepo.findByName("ROLE_USER")
+                .orElseThrow(() -> new EntityNotFoundException("Brak roli ROLE_USER"));
+
         User user = new User();
         user.setUsername(req.getUsername());
         user.setEmail(req.getEmail());
@@ -45,11 +45,14 @@ public class AuthService {
         userRepo.save(user);
     }
 
-    public void login(LoginRequest req) {
+    public String login(LoginRequest req) {
         authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        req.getUsername(), req.getPassword()
+                        req.getUsername(),
+                        req.getPassword()
                 )
         );
+        // tutaj można generować JWT; na potrzeby przykładu zwrócimy placeholder:
+        return "TOKEN_JWT_POLOGOWANIU";
     }
 }

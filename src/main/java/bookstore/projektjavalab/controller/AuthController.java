@@ -7,9 +7,12 @@ import bookstore.projektjavalab.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/auth")
-public class AuthController { // <- tego brakuje!
+public class AuthController {
+
     private final AuthService authService;
 
     public AuthController(AuthService authService) {
@@ -17,15 +20,14 @@ public class AuthController { // <- tego brakuje!
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest req) {
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest req) {
         authService.register(req);
-        return ResponseEntity.ok(new AuthResponse("Rejestracja zakończona"));
+        return ResponseEntity.ok(new AuthResponse("Rejestracja zakończona powodzeniem"));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest req) {
-        authService.login(req);
-        return ResponseEntity.ok(new AuthResponse("Zalogowano pomyślnie"));
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest req) {
+        String token = authService.login(req);
+        return ResponseEntity.ok(new AuthResponse(token));
     }
 }
-

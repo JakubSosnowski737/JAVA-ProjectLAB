@@ -1,13 +1,24 @@
 package bookstore.projektjavalab.payment;
 
-public class PaymentContext {
-    private final PaymentStrategy strategy;
+import org.springframework.stereotype.Component;
 
-    public PaymentContext(PaymentStrategy strategy) {
-        this.strategy = strategy;
+import java.math.BigDecimal;
+import java.util.Map;
+
+@Component
+public class PaymentContext {
+
+    private final Map<String, PaymentStrategy> strategies;
+
+    public PaymentContext(Map<String, PaymentStrategy> strategies) {
+        this.strategies = strategies;
     }
 
-    public void executePayment(double amount) {
+    public void pay(String method, BigDecimal amount) {
+        PaymentStrategy strategy = strategies.get(method);
+        if (strategy == null) {
+            throw new IllegalArgumentException("Nieobsługiwana metoda płatności: " + method);
+        }
         strategy.pay(amount);
     }
 }

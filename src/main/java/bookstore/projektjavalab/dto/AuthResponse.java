@@ -1,13 +1,21 @@
-// src/main/java/bookstore/projektjavalab/dto/AuthResponse.java
 package bookstore.projektjavalab.dto;
 
-import lombok.Getter;
-
-@Getter
 public class AuthResponse {
-    private final String message;
+
+    private String message; // lub: private String token;
+
+    public AuthResponse() {
+    }
 
     public AuthResponse(String message) {
+        this.message = message;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
         this.message = message;
     }
 }

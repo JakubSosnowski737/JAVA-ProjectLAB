@@ -1,4 +1,3 @@
-// src/main/java/bookstore/projektjavalab/controller/AdminController.java
 package bookstore.projektjavalab.controller;
 
 import bookstore.projektjavalab.model.User;
@@ -6,30 +5,27 @@ import bookstore.projektjavalab.service.UserRoleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/users")
-@PreAuthorize("hasRole('ADMIN')")
+@RequestMapping("/api/admin")
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class AdminController {
-    private final UserRoleService roleService;
 
-    public AdminController(UserRoleService roleService) {
-        this.roleService = roleService;
+    private final UserRoleService userRoleService;
+
+    public AdminController(UserRoleService userRoleService) {
+        this.userRoleService = userRoleService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<User>> listUsers() {
-        return ResponseEntity.ok(roleService.listAllUsers());
-    }
-
-    @PutMapping("/{userId}/roles/{roleName}")
+    @PostMapping("/users/{userId}/roles/{roleName}")
     public ResponseEntity<User> addRole(@PathVariable Long userId, @PathVariable String roleName) {
-        return ResponseEntity.ok(roleService.assignRole(userId, roleName));
+        User updatedUser = userRoleService.addRole(userId, roleName);
+        return ResponseEntity.ok(updatedUser);
     }
 
-    @DeleteMapping("/{userId}/roles/{roleName}")
+    @DeleteMapping("/users/{userId}/roles/{roleName}")
     public ResponseEntity<User> removeRole(@PathVariable Long userId, @PathVariable String roleName) {
-        return ResponseEntity.ok(roleService.removeRole(userId, roleName));
+        User updatedUser = userRoleService.removeRole(userId, roleName);
+        return ResponseEntity.ok(updatedUser);
     }
 }

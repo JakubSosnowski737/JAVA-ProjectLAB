@@ -1,4 +1,3 @@
-// src/main/java/bookstore/projektjavalab/controller/CategoryController.java
 package bookstore.projektjavalab.controller;
 
 import bookstore.projektjavalab.model.Category;
@@ -11,6 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/categories")
 public class CategoryController {
+
     private final CategoryService service;
 
     public CategoryController(CategoryService service) {
@@ -23,7 +23,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Category> get(@PathVariable Long id) {
+    public ResponseEntity<Category> getById(@PathVariable Long id) {
         return ResponseEntity.ok(service.findById(id));
     }
 

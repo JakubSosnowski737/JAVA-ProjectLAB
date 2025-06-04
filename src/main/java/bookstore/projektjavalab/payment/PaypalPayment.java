@@ -1,14 +1,15 @@
 package bookstore.projektjavalab.payment;
 
-public class PaypalPayment implements PaymentStrategy {
-    private final String email;
+import org.springframework.stereotype.Component;
 
-    public PaypalPayment(String email) {
-        this.email = email;
-    }
+import java.math.BigDecimal;
+
+@Component("paypal")
+public class PaypalPayment implements PaymentStrategy {
 
     @Override
-    public void pay(double amount) {
-        System.out.println("Processing PayPal payment of " + amount + " for " + email);
+    public void pay(BigDecimal amount) {
+        // Tu implementacja płatności przez PayPal (mock)
+        System.out.println("Płatność PayPal: kwota = " + amount);
     }
 }

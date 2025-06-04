@@ -1,17 +1,13 @@
 package bookstore.projektjavalab.model;
 
 import jakarta.persistence.*;
-import lombok.*;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "authors")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class Author {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,9 +15,50 @@ public class Author {
     @Column(nullable = false)
     private String name;
 
-    @Column(length = 2000)
+    @Column(columnDefinition = "TEXT")
     private String biography;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToMany(mappedBy = "authors")
     private Set<Book> books = new HashSet<>();
+
+    public Author() {
+    }
+
+    public Author(String name, String biography) {
+        this.name = name;
+        this.biography = biography;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    // setter do id
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getBiography() {
+        return biography;
+    }
+
+    public void setBiography(String biography) {
+        this.biography = biography;
+    }
+
+    public Set<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(Set<Book> books) {
+        this.books = books;
+    }
 }

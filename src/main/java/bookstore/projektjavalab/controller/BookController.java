@@ -10,6 +10,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
+
     private final BookService service;
 
     public BookController(BookService service) {
@@ -22,7 +23,7 @@ public class BookController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Book> get(@PathVariable Long id) {
+    public ResponseEntity<Book> getById(@PathVariable Long id) {
         return ResponseEntity.ok(service.findById(id));
     }
 

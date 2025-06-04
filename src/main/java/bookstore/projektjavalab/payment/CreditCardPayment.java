@@ -1,16 +1,15 @@
 package bookstore.projektjavalab.payment;
 
-public class CreditCardPayment implements PaymentStrategy {
-    private final String cardNumber;
-    private final String cardHolder;
+import org.springframework.stereotype.Component;
 
-    public CreditCardPayment(String cardNumber, String cardHolder) {
-        this.cardNumber = cardNumber;
-        this.cardHolder = cardHolder;
-    }
+import java.math.BigDecimal;
+
+@Component("creditCard")
+public class CreditCardPayment implements PaymentStrategy {
 
     @Override
-    public void pay(double amount) {
-        System.out.println("Processing credit card payment of " + amount + " for " + cardHolder);
+    public void pay(BigDecimal amount) {
+        // Tu implementacja płatności kartą (w przykładzie wystarczy logika mock)
+        System.out.println("Płatność kartą: kwota = " + amount);
     }
 }

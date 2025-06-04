@@ -1,5 +1,7 @@
 package bookstore.projektjavalab.payment;
 
+import java.math.BigDecimal;
+
 public interface PaymentStrategy {
-    void pay(double amount);
+    void pay(BigDecimal amount);
 }
