@@ -1,21 +1,19 @@
 package bookstore.projektjavalab.dto;
 
 public class AuthResponse {
+    private String token;
 
-    private String message; // lub: private String token;
+    public AuthResponse() {}
 
-    public AuthResponse() {
+    public AuthResponse(String token) {
+        this.token = token;
     }
 
-    public AuthResponse(String message) {
-        this.message = message;
+    public String getToken() {
+        return token;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
+    public void setToken(String token) {
+        this.token = token;
     }
 }

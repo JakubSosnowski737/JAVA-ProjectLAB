@@ -3,6 +3,7 @@ package bookstore.projektjavalab.controller;
 import bookstore.projektjavalab.model.Category;
 import bookstore.projektjavalab.service.CategoryService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class CategoryController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> create(@RequestBody Category category) {
         return ResponseEntity.ok(service.create(category));
     }
@@ -33,11 +35,13 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Category> modify(@PathVariable Long id, @RequestBody Category category) {
         return ResponseEntity.ok(service.update(id, category));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> remove(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();

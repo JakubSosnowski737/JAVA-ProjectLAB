@@ -47,3 +47,6 @@ CREATE TABLE books_categories (
                                   category_id INTEGER NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
                                   PRIMARY KEY (book_id, category_id)
 );
+
+INSERT INTO roles (name) VALUES ('ROLE_USER');
+INSERT INTO roles (name) VALUES ('ROLE_ADMIN');

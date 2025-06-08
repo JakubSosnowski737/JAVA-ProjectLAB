@@ -11,7 +11,7 @@
     <description>Przykładowy projekt Spring Boot z funkcjonalnościami CRUD i JWT</description>
 
     <properties>
-        <java.version>21</java.version>
+        <java.version>17</java.version>
         <spring-boot.version>3.0.5</spring-boot.version>
         <jjwt.version>0.11.5</jjwt.version>
     </properties>
@@ -114,6 +114,11 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.bytebuddy</groupId>
+            <artifactId>byte-buddy</artifactId>
+            <version>1.15.11</version>
         </dependency>
     </dependencies>
 

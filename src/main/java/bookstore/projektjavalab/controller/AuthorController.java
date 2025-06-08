@@ -3,6 +3,7 @@ package bookstore.projektjavalab.controller;
 import bookstore.projektjavalab.model.Author;
 import bookstore.projektjavalab.service.AuthorService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class AuthorController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Author> create(@RequestBody Author author) {
         return ResponseEntity.ok(service.create(author));
     }
@@ -33,11 +35,13 @@ public class AuthorController {
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Author> modify(@PathVariable Long id, @RequestBody Author author) {
         return ResponseEntity.ok(service.update(id, author));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> remove(@PathVariable Long id) {
         service.delete(id);
         return ResponseEntity.noContent().build();

@@ -6,14 +6,14 @@ import bookstore.projektjavalab.model.Role;
 import bookstore.projektjavalab.model.User;
 import bookstore.projektjavalab.repository.RoleRepository;
 import bookstore.projektjavalab.repository.UserRepository;
+import bookstore.projektjavalab.security.JwtTokenProvider;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -24,7 +24,7 @@ class AuthServiceTest {
     private UserRepository userRepo;
     private RoleRepository roleRepo;
     private PasswordEncoder encoder;
-    private AuthenticationManager authManager;
+    private JwtTokenProvider jwtTokenProvider;
     private AuthService authService;
 
     @BeforeEach
@@ -32,8 +32,8 @@ class AuthServiceTest {
         userRepo = mock(UserRepository.class);
         roleRepo = mock(RoleRepository.class);
         encoder = mock(PasswordEncoder.class);
-        authManager = mock(AuthenticationManager.class);
-        authService = new AuthService(userRepo, roleRepo, encoder, authManager);
+        jwtTokenProvider = mock(JwtTokenProvider.class);
+        authService = new AuthService(userRepo, jwtTokenProvider, encoder);
     }
 
     @Test
@@ -91,11 +91,16 @@ class AuthServiceTest {
         req.setUsername("jan");
         req.setPassword("tajne");
 
+        User user = new User();
+        user.setUsername("jan");
+        user.setPassword("zakodowane");
+        user.setRoles(Collections.emptySet());
+        when(userRepo.findByUsername("jan")).thenReturn(Optional.of(user));
+        when(encoder.matches("tajne", "zakodowane")).thenReturn(true);
+        when(jwtTokenProvider.generateToken("jan")).thenReturn("FAKE_JWT_TOKEN");
+
         String token = authService.login(req);
 
-        verify(authManager).authenticate(
-                new UsernamePasswordAuthenticationToken("jan", "tajne")
-        );
-        assertThat(token).isEqualTo("TOKEN_JWT_POLOGOWANIU");
+        assertThat(token).isEqualTo("FAKE_JWT_TOKEN");
     }
 }

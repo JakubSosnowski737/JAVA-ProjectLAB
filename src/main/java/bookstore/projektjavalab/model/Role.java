@@ -29,7 +29,6 @@ public class Role {
         return id;
     }
 
-    // setter do id można pominąć, ale poniżej dla spójności
     public void setId(Long id) {
         this.id = id;
     }

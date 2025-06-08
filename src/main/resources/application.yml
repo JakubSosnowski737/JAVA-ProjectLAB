@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/bookstore
-    username: bookstore_user
-    password: supersecret
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -22,10 +22,5 @@ server:
   port: 8080
 
 jwt:
-  secret: ${JWT_SECRET:moj-super-tajny-klucz-jwt-123456}
-  expirationMs: ${JWT_EXPIRATION_MS:86400000}
-
-logging:
-  level:
-    org.springframework.jdbc.datasource: DEBUG
-    org.hibernate.SQL: DEBUG
+  secret: moj-super-tajny-klucz-jwt-123456
+  expirationMs: 86400000

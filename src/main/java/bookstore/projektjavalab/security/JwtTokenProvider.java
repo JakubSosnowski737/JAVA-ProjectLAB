@@ -11,11 +11,9 @@ import java.util.Date;
 @Component
 public class JwtTokenProvider {
 
-    // Sekret do podpisywania tokenów (można przenieść do application.properties)
     @Value("${app.jwtSecret:ChangeThisSecretToSomethingSecure123!}")
     private String jwtSecret;
 
-    // Czas ważności tokenu w milisekundach (np. 24h)
     @Value("${app.jwtExpirationMs:86400000}")
     private long jwtExpirationMs;
 

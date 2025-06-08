@@ -22,7 +22,7 @@ import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -44,9 +44,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors()
-                .configurationSource(corsConfigurationSource())
-                .and()
+                .cors().configurationSource(corsConfigurationSource()).and()
                 .csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers(

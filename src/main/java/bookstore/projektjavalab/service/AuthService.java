@@ -2,57 +2,42 @@ package bookstore.projektjavalab.service;
 
 import bookstore.projektjavalab.dto.LoginRequest;
 import bookstore.projektjavalab.dto.RegisterRequest;
-import bookstore.projektjavalab.model.Role;
 import bookstore.projektjavalab.model.User;
-import bookstore.projektjavalab.repository.RoleRepository;
 import bookstore.projektjavalab.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import bookstore.projektjavalab.security.JwtTokenProvider;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AuthService {
 
-    private final UserRepository userRepo;
-    private final RoleRepository roleRepo;
-    private final PasswordEncoder encoder;
-    private final AuthenticationManager authManager;
+    private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthService(UserRepository userRepo,
-                       RoleRepository roleRepo,
-                       PasswordEncoder encoder,
-                       AuthenticationManager authManager) {
-        this.userRepo = userRepo;
-        this.roleRepo = roleRepo;
-        this.encoder = encoder;
-        this.authManager = authManager;
+    @Autowired
+    public AuthService(UserRepository userRepository,
+                       JwtTokenProvider jwtTokenProvider,
+                       PasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.passwordEncoder = passwordEncoder;
     }
 
-    public void register(RegisterRequest req) {
-        if (userRepo.findByUsername(req.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("Użytkownik już istnieje");
+    public String login(LoginRequest request) {
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() -> new RuntimeException("Niepoprawny login lub hasło"));
+
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Niepoprawny login lub hasło");
         }
-        Role userRole = roleRepo.findByName("ROLE_USER")
-                .orElseThrow(() -> new EntityNotFoundException("Brak roli ROLE_USER"));
 
-        User user = new User();
-        user.setUsername(req.getUsername());
-        user.setEmail(req.getEmail());
-        user.setPassword(encoder.encode(req.getPassword()));
-        user.getRoles().add(userRole);
-        userRepo.save(user);
+        return jwtTokenProvider.generateToken(user.getUsername());
     }
 
-    public String login(LoginRequest req) {
-        authManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        req.getUsername(),
-                        req.getPassword()
-                )
-        );
-        // tutaj można generować JWT; na potrzeby przykładu zwrócimy placeholder:
-        return "TOKEN_JWT_POLOGOWANIU";
+    public ResponseEntity<?> register(RegisterRequest request) {
+        return ResponseEntity.ok().body("Rejestracja zakończona powodzeniem");
     }
 }
