@@ -9,7 +9,6 @@ public class PaypalPayment implements PaymentStrategy {
 
     @Override
     public void pay(BigDecimal amount) {
-        // Tu implementacja płatności przez PayPal (mock)
         System.out.println("Płatność PayPal: kwota = " + amount);
     }
 }

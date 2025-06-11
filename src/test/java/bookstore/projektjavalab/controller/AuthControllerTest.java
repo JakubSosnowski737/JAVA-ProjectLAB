@@ -1,5 +1,6 @@
 package bookstore.projektjavalab.controller;
 
+import bookstore.projektjavalab.dto.AuthResponse;
 import bookstore.projektjavalab.dto.LoginRequest;
 import bookstore.projektjavalab.dto.RegisterRequest;
 import bookstore.projektjavalab.security.JwtTokenProvider;
@@ -51,11 +52,15 @@ public class AuthControllerTest {
     @DisplayName("POST /api/auth/register - poprawna rejestracja")
     void register_success() throws Exception {
         RegisterRequest req = new RegisterRequest("user123", "user@example.com", "password123");
+        // Rejestracja zwraca tekst, nie AuthResponse
+        when(authService.register(any(RegisterRequest.class)))
+                .thenReturn("Rejestracja zakończona powodzeniem");
+
         mockMvc.perform(post("/api/auth/register")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Rejestracja zakończona powodzeniem"));
+                .andExpect(content().string("Rejestracja zakończona powodzeniem"));
     }
 
     @Test
@@ -82,14 +87,13 @@ public class AuthControllerTest {
     @DisplayName("POST /api/auth/login - poprawne logowanie")
     void login_success() throws Exception {
         LoginRequest req = new LoginRequest("user123", "password123");
-        String fakeToken = "fake.jwt.token";
-        when(authService.login(any(LoginRequest.class))).thenReturn(fakeToken);
-
+        String fakeToken = "mocked-token";
+        when(authService.login(any(LoginRequest.class))).thenReturn(new AuthResponse(fakeToken));
         mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(req)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value(fakeToken));
+                .andExpect(jsonPath("$.token").value(fakeToken));
     }
 
     @Test
